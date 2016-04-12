@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>new review</title>
+<meta name="ref" th:content="${ref}"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script type="text/javascript">
+var newFileDiv = $('<div/>', {
+	'class': 'file'
+});
+
+$('<input/>', {
+	'class': 'fileName',
+	'placeholder': 'file name'
+}).appendTo(newFileDiv);
+
+$('<textarea/>', {
+	'class': 'fileContent',
+	'cols': 40,
+	'rows': 5,
+	'placeholder': 'file content'
+}).appendTo(newFileDiv);
+
+$('<textarea/>', {
+	'class': 'fileDiff',
+	'cols': 40,
+	'rows': 5,
+	'placeholder': 'file diff'
+}).appendTo(newFileDiv);
+
+function addNewFile() {
+	newFileDiv.clone().appendTo($('#fileList'));
+};
+
+$(document).ready(function() {
+	addNewFile();
+	
+	$('#addFileBtn').click(function() {
+		addNewFile();
+	});
+	
+	$('#submitBtn').click(function() {
+		var payload = {};
+		
+		$('.file .fileName').each(function(index, element) {
+			payload[element.value] = element.value;
+		});
+	});
+});
+
+</script>
+</head>
+<body>
+	<div id="fileList"></div>
+	<div>
+		<input id="addFileBtn" type="button" value="add file"/>
+	</div>
+	<div>
+		<input id="submitBtn" type="button" value="submit"/>
+	</div>
+</body>
+</html>
