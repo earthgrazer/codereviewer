@@ -1,7 +1,6 @@
 <html>
 <head>
 <title>new review</title>
-<meta name="ref" th:content="${ref}"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script type="text/javascript">
@@ -28,6 +27,13 @@ $('<textarea/>', {
 	'placeholder': 'file diff'
 }).appendTo(newFileDiv);
 
+$('<textarea/>', {
+	'class': 'fileComment',
+	'cols': 40,
+	'rows': 5,
+	'placeholder': 'review comment'
+}).appendTo(newFileDiv);
+
 function addNewFile() {
 	newFileDiv.clone().appendTo($('#fileList'));
 };
@@ -46,7 +52,8 @@ $(document).ready(function() {
 			payload.push({
 				'fileName': $(this).children('.fileName').val(),
 				'fileContent': $(this).children('.fileContent').val(),
-				'fileDiff': $(this).children('.fileDiff').val()
+				'fileDiff': $(this).children('.fileDiff').val(),
+				'fileComment': $(this).children('.fileComment').val()
 			});
 		});
 		
@@ -56,6 +63,7 @@ $(document).ready(function() {
 			data: JSON.stringify(payload),
 			contentType: 'application/json',
 			success: function(d) {
+				window.location.href = "/review/" + d;
 			}
 		});
 	});

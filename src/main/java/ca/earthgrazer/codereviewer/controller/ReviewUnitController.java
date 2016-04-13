@@ -1,15 +1,16 @@
 package ca.earthgrazer.codereviewer.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,11 +34,18 @@ public class ReviewUnitController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, consumes="application/json")
-	public @ResponseBody String createReview(@RequestBody List<ReviewFile> files, HttpServletResponse response) {
+	public @ResponseBody String createReview(@RequestBody List<ReviewFile> files) throws UnsupportedEncodingException {
 		log.debug(files.toString());
 		
-		String refId = reviewService.createReviewUnit(files);
+		return URLEncoder.encode(reviewService.createReviewUnit(files), "UTF-8");
+	}
+	
+	@RequestMapping(value="/{ref}", method=RequestMethod.GET)
+	public String getReview(@PathVariable String ref, Model model) {
+		List<ReviewFile> files = reviewService.getReviewUnit(ref);
 		
-		return refId;
+		model.addAttribute("files", files);
+		
+		return "viewreview";
 	}
 }

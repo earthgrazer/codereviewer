@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>review</title>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/src/prettify.css"/>
+<style>
+li.L0, li.L1, li.L2, li.L3,
+li.L5, li.L6, li.L7, li.L8
+{ list-style-type: decimal !important }
+</style>
+</head>
+<body>
+	<h2>files</h2>
+	<ul id="index">
+		<li th:each="file,stat : ${files}">
+			<a th:href="'#' + ${stat.index}" th:inline="text">[[${file.fileName}]]</a>
+		</li>
+	</ul>
+	<div th:each="file,stat : ${files}">
+		<h2 th:inline="text" th:id="${stat.index}">[[${file.fileName}]]</h2>
+		<h3 th:if="${not file.fileComment.isEmpty()}">review comment</h3>
+		<p th:inline="text" th:if="${not file.fileComment.isEmpty()}">[[${file.fileComment}]]</p>
+		<h3 th:if="${not file.fileContent.isEmpty()}">file content</h3>
+		<pre class="prettyprint linenums" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
+		<h3 th:if="${not file.fileDiff.isEmpty()}">file diff</h3>
+		<pre class="prettyprint" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
+		<a href="#index">back to index</a>
+	</div>
+</body>
+</html>

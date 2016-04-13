@@ -8,10 +8,13 @@ public class ReviewFile {
 	
 	public String fileDiff;
 	
+	public String fileComment;
+	
 	public ReviewFile() {}
 
 	@Override
 	public String toString() {
-		return "File [fileName=" + fileName + ", fileContent=" + fileContent + ", fileDiff=" + fileDiff + "]";
+		return "ReviewFile [fileName=" + fileName + ", fileContent=" + fileContent + ", fileDiff=" + fileDiff
+				+ ", fileComment=" + fileComment + "]";
 	}
 }
