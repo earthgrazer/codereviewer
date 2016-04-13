@@ -40,10 +40,23 @@ $(document).ready(function() {
 	});
 	
 	$('#submitBtn').click(function() {
-		var payload = {};
+		var payload = [];
 		
-		$('.file .fileName').each(function(index, element) {
-			payload[element.value] = element.value;
+		$('.file').each(function(index, element) {
+			payload.push({
+				'fileName': $(this).children('.fileName').val(),
+				'fileContent': $(this).children('.fileContent').val(),
+				'fileDiff': $(this).children('.fileDiff').val()
+			});
+		});
+		
+		$.ajax({
+			type: 'POST',
+			url: '/review',
+			data: JSON.stringify(payload),
+			contentType: 'application/json',
+			success: function(d) {
+			}
 		});
 	});
 });
