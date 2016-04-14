@@ -19,3 +19,7 @@ How to use **codereviewer**
 5. In a web browser, navigate to http://{host}:8080/review, where {host} is a LAN IP address
 6. Add source code to the review unit, then submit to save
 7. Copy the resulting URL from the browser's address bar and share it
+
+License
+===========================
+Apache License Version 2.0, January 2004.
