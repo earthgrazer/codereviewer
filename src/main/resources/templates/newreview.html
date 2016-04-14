@@ -7,15 +7,16 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
+
 <body>
 <div class="page-header">
-  <h1>codreviewer <small>review code without leaving your chair</small></h1>
+  <h1>codereviewer <small>review code without leaving your chair</small></h1>
 </div>
 
 <script>
 
 var newFileDiv = $('<div/>', {
-	'class': 'file'
+	'class': 'file col-md-8 col-md-offset-2'
 });
 
 $('<h3/>', {
@@ -86,7 +87,7 @@ $(document).ready(function() {
 </script>
 
 	<div id="fileList"></div>
-	<div>
+	<div class = "col-md-8 col-md-offset-2">
 	<button type="button" class="btn btn-info" id="addFileBtn">
     Add Additional File(s)
   </button>
@@ -97,4 +98,5 @@ $(document).ready(function() {
 		
 
 </body>
+
 </html>
