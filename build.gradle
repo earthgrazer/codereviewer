@@ -44,7 +44,7 @@ eclipse {
 }
 
 bootRun {
-    addResources = true
+	addResources = true
 }
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.12'
