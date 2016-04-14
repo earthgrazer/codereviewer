@@ -14,13 +14,19 @@
 </div>
 
 <script>
+var fileCounter = 1;
 
 var newFileDiv = $('<div/>', {
 	'class': 'file col-md-8 col-md-offset-2'
 });
 
+function counter(){
+var listItem = document.getElementsByTagName( "h3" );
+var amount = listItem.length;
+$( "h3" ).eq(amount-1).text(amount);
+}
 $('<h3/>', {
-	'text': 'New File to Review'
+	'text': fileCounter
 }).appendTo(newFileDiv); 
 
 $('<input/>', {
@@ -58,6 +64,7 @@ $(document).ready(function() {
 	
 	$('#addFileBtn').click(function() {
 		addNewFile();
+		counter();
 	});
 	
 	$('#submitBtn').click(function() {
