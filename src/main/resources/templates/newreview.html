@@ -1,40 +1,52 @@
 <html>
 <head>
-<title>new review</title>
+<title>New Review</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript">
+</head>
+
+<body>
+<div class="page-header">
+  <h1>codereviewer <small>review code without leaving your chair</small></h1>
+</div>
+
+<script>
+
 var newFileDiv = $('<div/>', {
-	'class': 'file'
+	'class': 'file col-md-8 col-md-offset-2'
 });
 
+$('<h3/>', {
+	'text': 'New File to Review'
+}).appendTo(newFileDiv); 
+
 $('<input/>', {
-	'class': 'fileName',
-	'placeholder': 'file name'
+	'class': 'form-control fileName panel-primary',
+	'placeholder': 'File Name'
 }).appendTo(newFileDiv);
 
 $('<textarea/>', {
-	'class': 'fileContent',
+	'class': 'form-control fileContent panel-primary',
 	'cols': 40,
 	'rows': 5,
-	'placeholder': 'file content'
+	'placeholder': 'File Contents'
 }).appendTo(newFileDiv);
 
 $('<textarea/>', {
-	'class': 'fileDiff',
+	'class': 'form-control fileDiff panel-primary',
 	'cols': 40,
 	'rows': 5,
-	'placeholder': 'file diff'
+	'placeholder': 'File Diff'
 }).appendTo(newFileDiv);
 
 $('<textarea/>', {
-	'class': 'fileComment',
+	'class': 'form-control fileComment panel-primary',
 	'cols': 40,
 	'rows': 5,
-	'placeholder': 'review comment'
+	'placeholder': 'Review Comment'
 }).appendTo(newFileDiv);
 
 function addNewFile() {
@@ -73,14 +85,18 @@ $(document).ready(function() {
 });
 
 </script>
-</head>
-<body>
+
 	<div id="fileList"></div>
-	<div>
-		<input id="addFileBtn" type="button" value="add file"/>
+	<div class = "col-md-8 col-md-offset-2">
+	<button type="button" class="btn btn-info" id="addFileBtn">
+    Add Additional File(s)
+  </button>
+		<button type="button" class="btn btn-primary" id="submitBtn">
+    Submit Your File(s)
+  </button>
 	</div>
-	<div>
-		<input id="submitBtn" type="button" value="submit"/>
-	</div>
+		
+
 </body>
+
 </html>
