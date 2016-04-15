@@ -1,20 +1,28 @@
 <html>
 <head>
 <title>New Review</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css" />
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<div class="page-header">
-  <h1>codereviewer <small>review code without leaving your chair</small></h1>
-</div>
+	<div class="page-header">
+		<h1>
+			codereviewer <small>review code without leaving your chair</small>
+		</h1>
+	</div>
 
-<script>
+	<script>
 var fileCounter = 1;
+var counts = 1;
 
 var newFileDiv = $('<div/>', {
 	'class': 'file col-md-8 col-md-offset-2'
@@ -24,6 +32,7 @@ function counter(){
 var listItem = document.getElementsByTagName( "h3" );
 var amount = listItem.length;
 $( "h3" ).eq(amount-1).text(amount);
+
 }
 $('<h3/>', {
 	'text': fileCounter
@@ -38,7 +47,8 @@ $('<textarea/>', {
 	'class': 'form-control fileContent panel-primary',
 	'cols': 40,
 	'rows': 5,
-	'placeholder': 'File Contents'
+	'placeholder': 'File Contents',
+	'id': 'fileContent'
 }).appendTo(newFileDiv);
 
 $('<textarea/>', {
@@ -55,16 +65,56 @@ $('<textarea/>', {
 	'placeholder': 'Review Comment'
 }).appendTo(newFileDiv);
 
+$('<input/>', {
+	'type': 'file',
+	'class': 'form-control fileToUpload',
+	'placeholder': 'Upload File',
+	'name' : "files[]",
+	'id': 'files'
+}).appendTo(newFileDiv);
+
+var stringToAppend;
+
+function handleFileSelect(evt) {
+    var files = evt.target.files; 
+
+    
+    for (var i = 0, f; f = files[i]; i++) {
+
+
+      var reader = new FileReader();
+      
+
+	reader.onload = function(e) {
+		stringToAppend = e.target.result;
+		var listItem = document.getElementsByTagName( "h3" );
+		var amount = listItem.length;
+		$(".fileContent").eq(amount-1).val(stringToAppend);
+	};
+	reader.readAsText(f);
+
+    };
+ };
+  
+
+function myFunction(){
+$( ".fileContent" ).each(function( index ) {
+   addEventListener('change', handleFileSelect, false);;
+});
+};
+
 function addNewFile() {
 	newFileDiv.clone().appendTo($('#fileList'));
 };
 
 $(document).ready(function() {
 	addNewFile();
+	setTimeout(myFunction,500);
 	
 	$('#addFileBtn').click(function() {
 		addNewFile();
 		counter();
+		setTimeout(myFunction,500);
 	});
 	
 	$('#submitBtn').click(function() {
@@ -94,15 +144,13 @@ $(document).ready(function() {
 </script>
 
 	<div id="fileList"></div>
-	<div class = "col-md-8 col-md-offset-2">
-	<button type="button" class="btn btn-info" id="addFileBtn">
-    Add Additional File(s)
-  </button>
+	<div class="col-md-8 col-md-offset-2">
+		<button type="button" class="btn btn-info" id="addFileBtn">
+			Add Additional File(s)</button>
 		<button type="button" class="btn btn-primary" id="submitBtn">
-    Submit Your File(s)
-  </button>
+			Submit Your File(s)</button>
 	</div>
-		
+
 
 </body>
 
