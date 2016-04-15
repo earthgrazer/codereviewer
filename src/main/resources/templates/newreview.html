@@ -76,6 +76,10 @@ $('<input/>', {
 var stringToAppend;
 
 function handleFileSelect(evt) {
+    var filesAll = document.getElementsByClassName("file");
+    var box = $(evt.target).closest('div').find('.fileContent');
+
+   
     var files = evt.target.files; 
 
     
@@ -89,7 +93,7 @@ function handleFileSelect(evt) {
 		stringToAppend = e.target.result;
 		var listItem = document.getElementsByTagName( "h3" );
 		var amount = listItem.length;
-		$(".fileContent").eq(amount-1).val(stringToAppend);
+		box.val(stringToAppend);
 	};
 	reader.readAsText(f);
 
@@ -98,8 +102,8 @@ function handleFileSelect(evt) {
   
 
 function myFunction(){
-$( ".fileContent" ).each(function( index ) {
-   addEventListener('change', handleFileSelect, false);;
+$( ".fileToUpload" ).each(function( index ) {
+   addEventListener('change', handleFileSelect, false);
 });
 };
 
