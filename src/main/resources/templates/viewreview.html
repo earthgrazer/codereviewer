@@ -1,13 +1,51 @@
 <html>
 <head>
 <title>review</title>
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script type="text/javascript" src="/js/diff.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/src/prettify.css"/>
 <style>
 li.L0, li.L1, li.L2, li.L3,
 li.L5, li.L6, li.L7, li.L8
 { list-style-type: decimal !important }
+
+.highlightnew { background-color: #ccff99; }
+.highlightremoved { background-color: #ffcccc; }
 </style>
+<script type="text/javascript">
+function createSpan(style, text) {
+	return $('<span/>', {
+		'class': style
+	}).text(text);
+}
+
+$(document).ready(function(){
+	$('.filesection').each(function(index, element) {
+		// for each file, check if we can get the previous revision by reverting the diff
+		var fileDiff = $(this).children('.filediff'),
+			patch = JsDiff.parsePatch(fileDiff.text()),
+			fileContent = $(this).children('.filecontent').text(),
+			oldContent = JsDiff.revertPatch(fileContent, patch),
+			diff = JsDiff.diffLines(oldContent, fileContent);
+		
+		// clear the unified diff and show diff highlight view if the patch can be successfully applied
+		if (diff)
+			fileDiff.text('');
+		else
+			return;
+		
+		diff.forEach(function(part) {
+			style = 'highlightexisting';
+			if (part.added)
+				style = 'highlightnew';
+			else if (part.removed)
+				style = 'highlightremoved';
+			fileDiff.append(createSpan(style, part.value));
+		});
+	});
+});
+</script>
 </head>
 <body>
 	<h2>files</h2>
@@ -16,14 +54,14 @@ li.L5, li.L6, li.L7, li.L8
 			<a th:href="'#' + ${stat.index}" th:inline="text">[[${file.fileName}]]</a>
 		</li>
 	</ul>
-	<div th:each="file,stat : ${files}">
+	<div class="filesection" th:each="file,stat : ${files}">
 		<h2 th:inline="text" th:id="${stat.index}">[[${file.fileName}]]</h2>
 		<h3 th:if="${not file.fileComment.isEmpty()}">review comment</h3>
 		<p th:inline="text" th:if="${not file.fileComment.isEmpty()}">[[${file.fileComment}]]</p>
 		<h3 th:if="${not file.fileContent.isEmpty()}">file content</h3>
-		<pre class="prettyprint linenums" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
+		<pre class="filecontent prettyprint linenums" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
 		<h3 th:if="${not file.fileDiff.isEmpty()}">file diff</h3>
-		<pre class="prettyprint" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
+		<pre class="filediff prettyprint" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
 		<a href="#index">back to index</a>
 	</div>
 </body>
