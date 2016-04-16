@@ -31,7 +31,7 @@ function createDiffHighlight(content, diff) {
 	var diffParts = JsDiff.diffLines(oldContent, content);
 		
 	var diffNode = $('<pre/>', {
-		'class': 'filediffhighlight prettyprint'
+		'class': 'filediffhighlight prettyprint linenums'
 	});
 	
 	diffParts.forEach(function(part) {
@@ -39,7 +39,7 @@ function createDiffHighlight(content, diff) {
 		if (part.added)
 			style = 'highlightnew';
 		else if (part.removed)
-			style = 'highlightremoved';
+			style = 'highlightremoved nocode';
 		diffNode.append(createSpan(style, part.value));
 	});
 	
@@ -68,6 +68,7 @@ $(document).ready(function(){
 				if ((diffHighlight = createDiffHighlight(fileContentText, fileDiffText))) {
 					diffHighlight.insertAfter(fileSection.children('.filediff'));
 				}
+				PR.prettyPrint();
 			}
 			
 			fileSection.children('.filediffhighlight').show();
