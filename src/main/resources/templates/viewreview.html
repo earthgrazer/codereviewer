@@ -12,6 +12,7 @@ li.L5, li.L6, li.L7, li.L8
 
 .highlightnew { background-color: #ccff99; }
 .highlightremoved { background-color: #ffcccc; }
+.highlightlink { margin-left: 15; }
 </style>
 <script type="text/javascript">
 function createSpan(style, text) {
@@ -20,29 +21,62 @@ function createSpan(style, text) {
 	}).text(text);
 }
 
+function createDiffHighlight(content, diff) {
+	// check if we can get the previous revision by reverting the diff
+	var oldContent = JsDiff.revertPatch(content, diff);
+	
+	if (!oldContent)
+		return null;
+	
+	var diffParts = JsDiff.diffLines(oldContent, content);
+		
+	var diffNode = $('<pre/>', {
+		'class': 'filediffhighlight prettyprint'
+	});
+	
+	diffParts.forEach(function(part) {
+		style = 'highlightexisting';
+		if (part.added)
+			style = 'highlightnew';
+		else if (part.removed)
+			style = 'highlightremoved';
+		diffNode.append(createSpan(style, part.value));
+	});
+	
+	return diffNode;
+}
+
 $(document).ready(function(){
 	$('.filesection').each(function(index, element) {
-		// for each file, check if we can get the previous revision by reverting the diff
-		var fileDiff = $(this).children('.filediff'),
-			patch = JsDiff.parsePatch(fileDiff.text()),
-			fileContent = $(this).children('.filecontent').text(),
-			oldContent = JsDiff.revertPatch(fileContent, patch),
-			diff = JsDiff.diffLines(oldContent, fileContent);
+		var fileSection = $(this),
+			fileContent = fileSection.children('.filecontent'),
+			fileContentText = fileContent.text(),
+			fileDiff = fileSection.children('.filediff'),
+			fileDiffText = fileDiff.text();
 		
-		// clear the unified diff and show diff highlight view if the patch can be successfully applied
-		if (diff)
-			fileDiff.text('');
-		else
-			return;
-		
-		diff.forEach(function(part) {
-			style = 'highlightexisting';
-			if (part.added)
-				style = 'highlightnew';
-			else if (part.removed)
-				style = 'highlightremoved';
-			fileDiff.append(createSpan(style, part.value));
+		$(this).find('.unifiedlink').click(function(e) {
+			e.preventDefault();
+			fileSection.children('.filediffhighlight').hide();
+			fileSection.children('.filediff').show();
 		});
+		
+		$(this).find('.highlightlink').click(function(e) {
+			e.preventDefault();
+			
+			if (fileSection.children('.filediffhighlight').length == 0) {
+				var diffHighlight;
+				if ((diffHighlight = createDiffHighlight(fileContentText, fileDiffText))) {
+					diffHighlight.insertAfter(fileSection.children('.filediff'));
+				}
+			}
+			
+			fileSection.children('.filediffhighlight').show();
+			fileSection.children('.filediff').hide();
+		});
+		
+		// add prettyprint classes after getting file content to retain original line breaks
+		fileContent.addClass('prettyprint linenums');
+		fileDiff.addClass('prettyprint');
 	});
 });
 </script>
@@ -59,9 +93,10 @@ $(document).ready(function(){
 		<h3 th:if="${not file.fileComment.isEmpty()}">review comment</h3>
 		<p th:inline="text" th:if="${not file.fileComment.isEmpty()}">[[${file.fileComment}]]</p>
 		<h3 th:if="${not file.fileContent.isEmpty()}">file content</h3>
-		<pre class="filecontent prettyprint linenums" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
+		<pre class="filecontent" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
 		<h3 th:if="${not file.fileDiff.isEmpty()}">file diff</h3>
-		<pre class="filediff prettyprint" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
+		<div class="diffcontrols"><a href="#" class="unifiedlink">show unified diff</a><a href="#" class="highlightlink">show highlighted diff</a></div>
+		<pre class="filediff" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
 		<a href="#index">back to index</a>
 	</div>
 </body>
