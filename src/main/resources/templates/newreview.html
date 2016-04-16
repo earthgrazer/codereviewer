@@ -22,7 +22,6 @@
 
 	<script>
 var fileCounter = 1;
-var counts = 1;
 
 var newFileDiv = $('<div/>', {
 	'class': 'file col-md-8 col-md-offset-2'
@@ -51,6 +50,7 @@ $('<textarea/>', {
 	'id': 'fileContent'
 }).appendTo(newFileDiv);
 
+
 $('<textarea/>', {
 	'class': 'form-control fileDiff panel-primary',
 	'cols': 40,
@@ -67,11 +67,13 @@ $('<textarea/>', {
 
 $('<input/>', {
 	'type': 'file',
-	'class': 'form-control fileToUpload',
+	'class': 'form-control fileToUpload panel-primary',
 	'placeholder': 'Upload File',
 	'name' : "files[]",
 	'id': 'files'
 }).appendTo(newFileDiv);
+
+
 
 var stringToAppend;
 
@@ -101,7 +103,7 @@ function handleFileSelect(evt) {
  };
   
 
-function myFunction(){
+function addUploadButtonListener(){
 $( ".fileToUpload" ).each(function( index ) {
    addEventListener('change', handleFileSelect, false);
 });
@@ -113,12 +115,12 @@ function addNewFile() {
 
 $(document).ready(function() {
 	addNewFile();
-	setTimeout(myFunction,500);
+	addUploadButtonListener();
 	
 	$('#addFileBtn').click(function() {
 		addNewFile();
 		counter();
-		setTimeout(myFunction,500);
+		addUploadButtonListener();
 	});
 	
 	$('#submitBtn').click(function() {
