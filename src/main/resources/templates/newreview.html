@@ -7,33 +7,10 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <style>
-body {
-	margin: 0;
-}
-
-#fileArea {
-	display: table;
-	margin: 0 auto;
-}
-
-.fileName {
-	width: 50em;
-}
-
-.fileContent {
-	width: 50em;
-}
-
-.fileDiff {
-	width: 50em;
-}
-
-.fileComment {
-	width: 50em;
-}
-
-#buttons {
-	margin: 0;
+@media (min-width: 1200px) {
+	.container {
+ 		width: 760px;
+	}
 }
 </style>
 </head>
@@ -44,16 +21,20 @@ body {
 	</div>
 	
 	<script>
+	var buttons;
+	
 	function addNewFile() {
-		var newFile = $(".file").clone();
+		var newFile = $(".file").first().clone();
 		newFile.find(".fileName").val("");
 		newFile.find(".fileContent").val("");
 		newFile.find(".fileDiff").val("");
 		newFile.find(".fileComment").val("");
-		newFile.appendTo($('#fileList'));
+		newFile.insertBefore(buttons);
 	};
 	
 	$(document).ready(function() {
+		buttons = $('#buttons');
+		
 		$('#addFileBtn').click(function() {
 			addNewFile();
 		});
@@ -83,29 +64,27 @@ body {
 	});
 	
 	</script>
-	<div id="filearea">
-		<div id="fileList">
-			<div th:if="${files != null}" th:each="file : ${files}" class="file">
-				<h3>New File to Review</h3>
-				<div class="form-group">
-					<label>File Name</label>
-					<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
-				</div>
-				<div class="form-group">
-					<label>File Content</label>
-					<textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Contents" th:text="${file.fileContent}"/>
-				</div>
-				<div class="form-group">
-					<label>File Diff</label>
-					<textarea class="form-control panel-primary fileDiff" rows="10" placeholder="File Diff" th:text="${file.fileDiff}"/>
-				</div>
-				<div class="form-group">
-					<label>Review Comment</label>
-					<textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment" th:text="${file.fileComment}"/>
-				</div>
+	<div id="fileList" class="container">
+		<div th:if="${files != null}" th:each="file : ${files}" class="file row">
+			<h3>New File to Review</h3>
+			<div class="form-group">
+				<label>File Name</label>
+				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
+			</div>
+			<div class="form-group">
+				<label>File Content</label>
+				<textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Contents" th:text="${file.fileContent}"/>
+			</div>
+			<div class="form-group">
+				<label>File Diff</label>
+				<textarea class="form-control panel-primary fileDiff" rows="10" placeholder="File Diff" th:text="${file.fileDiff}"/>
+			</div>
+			<div class="form-group">
+				<label>Review Comment</label>
+				<textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment" th:text="${file.fileComment}"/>
 			</div>
 		</div>
-		<p>
+		<p id="buttons" class="row">
 			<button type="button" class="btn btn-info" id="addFileBtn">Add Additional File(s)</button>
 			<button type="button" class="btn btn-primary" id="submitBtn">Submit Your File(s)</button>
 		</p>
