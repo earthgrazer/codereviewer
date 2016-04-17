@@ -1,13 +1,94 @@
 <html>
 <head>
 <title>review</title>
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script type="text/javascript" src="/js/diff.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/google/code-prettify/master/src/prettify.css"/>
 <style>
 li.L0, li.L1, li.L2, li.L3,
 li.L5, li.L6, li.L7, li.L8
 { list-style-type: decimal !important }
+
+.highlightnew { background-color: #ccff99; }
+.highlightremoved { background-color: #ffcccc; }
+.highlightlink { margin-left: 15; }
 </style>
+<script type="text/javascript">
+function createSpan(style, text) {
+	return $('<span/>', {
+		'class': style
+	}).text(text);
+}
+
+/**
+ * Create a merged view of the latest revision and the diff from the previous revision.
+ * This is accomplished by using the jsdiff library with extension to revert patch.
+ * The previous revision of the file is obtained by applying the diff in reverse,
+ * then the merged output is produced by diffing the latest and the previous.
+ */
+function createDiffHighlight(content, diff) {
+	// check if we can get the previous revision by reverting the diff
+	var oldContent = JsDiff.revertPatch(content, diff);
+	
+	if (!oldContent)
+		return null;
+	
+	var diffParts = JsDiff.diffLines(oldContent, content);
+		
+	var diffNode = $('<pre/>', {
+		'class': 'filediffhighlight prettyprint linenums'
+	});
+	
+	diffParts.forEach(function(part) {
+		style = 'highlightexisting';
+		if (part.added)
+			style = 'highlightnew';
+		else if (part.removed)
+			style = 'highlightremoved nocode';
+		diffNode.append(createSpan(style, part.value));
+	});
+	
+	return diffNode;
+}
+
+$(document).ready(function(){
+	$('.filesection').each(function(index, element) {
+		var fileSection = $(this),
+			fileContent = fileSection.children('.filecontent'),
+			fileContentText = fileContent.text(),
+			fileDiff = fileSection.children('.filediff'),
+			fileDiffText = fileDiff.text();
+		
+		$(this).find('.unifiedlink').click(function(e) {
+			e.preventDefault();
+			fileSection.children('.filediffhighlight').hide();
+			fileDiff.show();
+		});
+		
+		$(this).find('.highlightlink').click(function(e) {
+			e.preventDefault();
+			
+			if (fileSection.children('.filediffhighlight').length == 0) {
+				var diffHighlight;
+				if (!(diffHighlight = createDiffHighlight(fileContentText, fileDiffText))) {
+					diffHighlight = $('<p/>', {'class': 'filediffhighlight'});
+					diffHighlight.text('Oops, there was a problem generating diff highlighting :(');
+				}
+				diffHighlight.insertAfter(fileDiff);
+				PR.prettyPrint();
+			}
+			
+			fileSection.children('.filediffhighlight').show();
+			fileDiff.hide();
+		});
+		
+		// add prettyprint classes after getting file content to retain original line breaks
+		fileContent.addClass('prettyprint linenums');
+		fileDiff.addClass('prettyprint');
+	});
+});
+</script>
 </head>
 <body>
 	<h2>files</h2>
@@ -16,14 +97,15 @@ li.L5, li.L6, li.L7, li.L8
 			<a th:href="'#' + ${stat.index}" th:inline="text">[[${file.fileName}]]</a>
 		</li>
 	</ul>
-	<div th:each="file,stat : ${files}">
+	<div class="filesection" th:each="file,stat : ${files}">
 		<h2 th:inline="text" th:id="${stat.index}">[[${file.fileName}]]</h2>
 		<h3 th:if="${not file.fileComment.isEmpty()}">review comment</h3>
 		<p th:inline="text" th:if="${not file.fileComment.isEmpty()}">[[${file.fileComment}]]</p>
 		<h3 th:if="${not file.fileContent.isEmpty()}">file content</h3>
-		<pre class="prettyprint linenums" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
+		<pre class="filecontent" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
 		<h3 th:if="${not file.fileDiff.isEmpty()}">file diff</h3>
-		<pre class="prettyprint" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
+		<div class="diffcontrols"><a href="#" class="unifiedlink">show unified diff</a><a href="#" class="highlightlink">show highlighted diff</a></div>
+		<pre class="filediff" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
 		<a href="#index">back to index</a>
 	</div>
 </body>
