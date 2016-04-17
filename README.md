@@ -4,6 +4,8 @@ What is **codereviewer**
 
 **codereviewer** allows developers to take advantage of third-party hosted communication services, while keeping the persistance and access of the shared source code under the developers' control.
 
+The design philosophy is to *Keep It Simple*. There is no user login, database management, or configuration, because sharing code doesn't have to be complicated.
+
 How does **codereviewer** work
 ==========================
 **codereviewer** is a self-contained Spring Boot application that can be built and deployed on the embedded application server with a single command. When deployed, the web app is accessible to anyone who can reach the local machine through the deployed server port. So in this sense, **codereviewer** is as secure as the local machine and LAN firewall. 
