@@ -2,13 +2,13 @@ package ca.earthgrazer.codereviewer.model;
 
 public class ReviewFile {
 	
-	public String fileName;
+	public String fileName = "";
 	
-	public String fileContent;
+	public String fileContent = "";
 	
-	public String fileDiff;
+	public String fileDiff = "";
 	
-	public String fileComment;
+	public String fileComment = "";
 	
 	public ReviewFile() {}
 
