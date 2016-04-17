@@ -6,97 +6,109 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+body {
+	margin: 0;
+}
+
+#fileArea {
+	display: table;
+	margin: 0 auto;
+}
+
+.fileName {
+	width: 50em;
+}
+
+.fileContent {
+	width: 50em;
+}
+
+.fileDiff {
+	width: 50em;
+}
+
+.fileComment {
+	width: 50em;
+}
+
+#buttons {
+	margin: 0;
+}
+</style>
 </head>
 
 <body>
-<div class="page-header">
-  <h1>codereviewer <small>review code without leaving your chair</small></h1>
-</div>
-
-<script>
-
-var newFileDiv = $('<div/>', {
-	'class': 'file col-md-8 col-md-offset-2'
-});
-
-$('<h3/>', {
-	'text': 'New File to Review'
-}).appendTo(newFileDiv); 
-
-$('<input/>', {
-	'class': 'form-control fileName panel-primary',
-	'placeholder': 'File Name'
-}).appendTo(newFileDiv);
-
-$('<textarea/>', {
-	'class': 'form-control fileContent panel-primary',
-	'cols': 40,
-	'rows': 5,
-	'placeholder': 'File Contents'
-}).appendTo(newFileDiv);
-
-$('<textarea/>', {
-	'class': 'form-control fileDiff panel-primary',
-	'cols': 40,
-	'rows': 5,
-	'placeholder': 'File Diff'
-}).appendTo(newFileDiv);
-
-$('<textarea/>', {
-	'class': 'form-control fileComment panel-primary',
-	'cols': 40,
-	'rows': 5,
-	'placeholder': 'Review Comment'
-}).appendTo(newFileDiv);
-
-function addNewFile() {
-	newFileDiv.clone().appendTo($('#fileList'));
-};
-
-$(document).ready(function() {
-	addNewFile();
+	<div class="page-header">
+		<h1>codereviewer <small>review code without leaving your chair</small></h1>
+	</div>
 	
-	$('#addFileBtn').click(function() {
-		addNewFile();
-	});
+	<script>
+	function addNewFile() {
+		var newFile = $(".file").clone();
+		newFile.find(".fileName").val("");
+		newFile.find(".fileContent").val("");
+		newFile.find(".fileDiff").val("");
+		newFile.find(".fileComment").val("");
+		newFile.appendTo($('#fileList'));
+	};
 	
-	$('#submitBtn').click(function() {
-		var payload = [];
+	$(document).ready(function() {
+		$('#addFileBtn').click(function() {
+			addNewFile();
+		});
 		
-		$('.file').each(function(index, element) {
-			payload.push({
-				'fileName': $(this).children('.fileName').val(),
-				'fileContent': $(this).children('.fileContent').val(),
-				'fileDiff': $(this).children('.fileDiff').val(),
-				'fileComment': $(this).children('.fileComment').val()
+		$('#submitBtn').click(function() {
+			var payload = [];
+			
+			$('.file').each(function(index, element) {
+				payload.push({
+					'fileName': $(this).find('.fileName').val(),
+					'fileContent': $(this).find('.fileContent').val(),
+					'fileDiff': $(this).find('.fileDiff').val(),
+					'fileComment': $(this).find('.fileComment').val()
+				});
+			});
+			
+			$.ajax({
+				type: 'POST',
+				url: '/review',
+				data: JSON.stringify(payload),
+				contentType: 'application/json',
+				success: function(d) {
+					window.location.href = "/review/" + d;
+				}
 			});
 		});
-		
-		$.ajax({
-			type: 'POST',
-			url: '/review',
-			data: JSON.stringify(payload),
-			contentType: 'application/json',
-			success: function(d) {
-				window.location.href = "/review/" + d;
-			}
-		});
 	});
-});
-
-</script>
-
-	<div id="fileList"></div>
-	<div class = "col-md-8 col-md-offset-2">
-	<button type="button" class="btn btn-info" id="addFileBtn">
-    Add Additional File(s)
-  </button>
-		<button type="button" class="btn btn-primary" id="submitBtn">
-    Submit Your File(s)
-  </button>
+	
+	</script>
+	<div id="filearea">
+		<div id="fileList">
+			<div th:if="${files != null}" th:each="file : ${files}" class="file">
+				<h3>New File to Review</h3>
+				<div class="form-group">
+					<label>File Name</label>
+					<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
+				</div>
+				<div class="form-group">
+					<label>File Content</label>
+					<textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Contents" th:text="${file.fileContent}"/>
+				</div>
+				<div class="form-group">
+					<label>File Diff</label>
+					<textarea class="form-control panel-primary fileDiff" rows="10" placeholder="File Diff" th:text="${file.fileDiff}"/>
+				</div>
+				<div class="form-group">
+					<label>Review Comment</label>
+					<textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment" th:text="${file.fileComment}"/>
+				</div>
+			</div>
+		</div>
+		<p>
+			<button type="button" class="btn btn-info" id="addFileBtn">Add Additional File(s)</button>
+			<button type="button" class="btn btn-primary" id="submitBtn">Submit Your File(s)</button>
+		</p>
 	</div>
-		
-
 </body>
-
 </html>

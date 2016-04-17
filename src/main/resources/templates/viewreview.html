@@ -108,5 +108,6 @@ $(document).ready(function(){
 		<pre class="filediff" th:inline="text" th:if="${not file.fileDiff.isEmpty()}">[[${file.fileDiff}]]</pre>
 		<a href="#index">back to index</a>
 	</div>
+	<a th:href="@{/review(origin=${ref})}">clone review</a>
 </body>
 </html>
