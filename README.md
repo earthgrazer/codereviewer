@@ -1,14 +1,14 @@
 What is **codereviewer**
 ====================
-**codereviewer** is a simple web application that makes the linking of proprietary source code over the internet safe. A common scenario where **codereviewer** could be useful is copying and pasting source code on off-site communication services like Slack; someone might want to do this to show another developer some code changes. This requires trust that the off-site service does expire communication history, and whatever it keeps is kept in a way that is secure and confidential.
+**codereviewer** is a simple web application that makes the linking of in-house source code over the internet safe. Want to share code with your coworker, but company policy forbids uploading code to third-party services (e.g. Slack) as security precaution? Use **codereviewer** to serve up files behind the comfort of your enterprise firewall.
 
 **codereviewer** allows developers to take advantage of third-party hosted communication services, while keeping the persistance and access of the shared source code under the developers' control.
 
 How does **codereviewer** work
 ==========================
-Pretty simple actually. **codereviewer** is a self-contained Spring Boot application that can be built and deployed on the embedded application server with a single command. When deployed, the web app is accessible to anyone who can reach the local machine through the deployed server port. So in this sense, **codereviewer** is as secure as the local machine and LAN firewall. 
+**codereviewer** is a self-contained Spring Boot application that can be built and deployed on the embedded application server with a single command. When deployed, the web app is accessible to anyone who can reach the local machine through the deployed server port. So in this sense, **codereviewer** is as secure as the local machine and LAN firewall. 
 
-Source code files are organized into *review units*. The developer creates a *review unit*, adds one or more source code files to it, then saves the unit. Saving the *review unit* produces a shareable URL containing a unique reference id, which can then be given to anyone with port access to the web app. In the current **codereviewer** version, *review units* are stored in the JVM process memory; all stored information is discarded when the web app is terminated.
+Source code files are organized into *review units*. The developer creates a *review unit*, adds one or more source code files to it, then saves the unit. Saving the *review unit* produces a shareable URL containing a unique reference id, which can then be given to anyone with port access to the web app. In the current version, *review units* are stored in the JVM process memory; none of the stored information is retained by the application when the process is terminated.
 
 How to use **codereviewer**
 ===========================
@@ -23,3 +23,5 @@ How to use **codereviewer**
 License
 ===========================
 Apache License Version 2.0, January 2004.
+
+See [LICENSE](https://github.com/earthgrazer/codereviewer/blob/master/LICENSE).
