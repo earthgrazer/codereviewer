@@ -21,6 +21,12 @@ function createSpan(style, text) {
 	}).text(text);
 }
 
+/**
+ * Create a merged view of the latest revision and the diff from the previous revision.
+ * This is accomplished by using the jsdiff library with extension to revert patch.
+ * The previous revision of the file is obtained by applying the diff in reverse,
+ * then the merged output is produced by diffing the latest and the previous.
+ */
 function createDiffHighlight(content, diff) {
 	// check if we can get the previous revision by reverting the diff
 	var oldContent = JsDiff.revertPatch(content, diff);
@@ -57,7 +63,7 @@ $(document).ready(function(){
 		$(this).find('.unifiedlink').click(function(e) {
 			e.preventDefault();
 			fileSection.children('.filediffhighlight').hide();
-			fileSection.children('.filediff').show();
+			fileDiff.show();
 		});
 		
 		$(this).find('.highlightlink').click(function(e) {
@@ -65,14 +71,16 @@ $(document).ready(function(){
 			
 			if (fileSection.children('.filediffhighlight').length == 0) {
 				var diffHighlight;
-				if ((diffHighlight = createDiffHighlight(fileContentText, fileDiffText))) {
-					diffHighlight.insertAfter(fileSection.children('.filediff'));
+				if (!(diffHighlight = createDiffHighlight(fileContentText, fileDiffText))) {
+					diffHighlight = $('<p/>', {'class': 'filediffhighlight'});
+					diffHighlight.text('Oops, there was a problem generating diff highlighting :(');
 				}
+				diffHighlight.insertAfter(fileDiff);
 				PR.prettyPrint();
 			}
 			
 			fileSection.children('.filediffhighlight').show();
-			fileSection.children('.filediff').hide();
+			fileDiff.hide();
 		});
 		
 		// add prettyprint classes after getting file content to retain original line breaks
