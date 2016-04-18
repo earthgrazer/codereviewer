@@ -22,7 +22,6 @@
 	
 	<script>
 	var buttons;
-	var fileCounter = 1;
 	
 	function addNewFile() {
 		var newFile = $(".file").first().clone();
@@ -41,7 +40,6 @@
 	
 	$(document).ready(function() {
 		buttons = $('#buttons');
-		counter();
 		
 		$('#addFileBtn').click(function() {
 			addNewFile();
@@ -75,7 +73,7 @@
 	</script>
 	<div id="fileList" class="container">
 		<div th:if="${files != null}" th:each="file : ${files}" class="file row">
-			<h3>New File to Review</h3>
+			<h3>1</h3>
 			<div class="form-group">
 				<label class = "label label-primary">File Name</label>
 				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
