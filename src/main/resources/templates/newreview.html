@@ -68,19 +68,19 @@
 		<div th:if="${files != null}" th:each="file : ${files}" class="file row">
 			<h3>New File to Review</h3>
 			<div class="form-group">
-				<label>File Name</label>
+				<label class = "label label-primary">File Name</label>
 				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
 			</div>
 			<div class="form-group">
-				<label>File Content</label>
-				<textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Contents" th:text="${file.fileContent}"/>
+				<label class = "label label-primary">File Content</label>
+				<textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Content" th:text="${file.fileContent}"/>
 			</div>
 			<div class="form-group">
-				<label>File Diff</label>
+				<label class = "label label-primary">File Diff</label>
 				<textarea class="form-control panel-primary fileDiff" rows="10" placeholder="File Diff" th:text="${file.fileDiff}"/>
 			</div>
 			<div class="form-group">
-				<label>Review Comment</label>
+				<label class = "label label-primary">Review Comment</label>
 				<textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment" th:text="${file.fileComment}"/>
 			</div>
 		</div>
