@@ -2,10 +2,6 @@
 ##What is it
 **codereviewer** is a simple web application that makes the linking of in-house source code over the internet safe. Want to share code with your coworker, but company policy forbids uploading code to third-party services (e.g. Slack) as security precaution? Use **codereviewer** to serve up files behind the comfort of your enterprise firewall.
 
-**codereviewer** allows developers to take advantage of third-party hosted communication services, while keeping the persistance and access of the shared source code under the developers' control.
-
-The design philosophy is to *Keep It Simple*. There is no user login, database management, or configuration, because sharing code doesn't have to be complicated.
-
 ##How to use it
 1. Clone the repository
 2. Open a terminal
