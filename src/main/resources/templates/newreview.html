@@ -22,6 +22,7 @@
 	
 	<script>
 	var buttons;
+	var fileCounter = 1;
 	
 	function addNewFile() {
 		var newFile = $(".file").first().clone();
@@ -32,11 +33,19 @@
 		newFile.insertBefore(buttons);
 	};
 	
+	function counter(){
+		var listItem = document.getElementsByTagName( "h3" );
+		var amount = listItem.length;
+		$( "h3" ).eq(amount-1).text(amount);
+	};
+	
 	$(document).ready(function() {
 		buttons = $('#buttons');
+		counter();
 		
 		$('#addFileBtn').click(function() {
 			addNewFile();
+			counter();
 		});
 		
 		$('#submitBtn').click(function() {
