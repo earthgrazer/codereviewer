@@ -22,7 +22,6 @@
 	
 	<script>
 	var buttons;
-	var fileCounter = 1;
 	
 	function addNewFile() {
 		var newFile = $(".file").first().clone();
@@ -41,7 +40,6 @@
 	
 	$(document).ready(function() {
 		buttons = $('#buttons');
-		counter();
 		addUploadButtonListener();
 		
 		$('#addFileBtn').click(function() {
@@ -75,34 +73,30 @@
 	});
 	
 	function handleFileSelect(evt) {
-    var filesAll = document.getElementsByClassName("file");
-    var box = $(evt.target).closest('.file').find('.fileContent');
-   
-    var files = evt.target.files; 
+    	var box = $(evt.target).closest('.file').find('.fileContent');
+    	var files = evt.target.files; 
     
-    for (var i = 0, f; f = files[i]; i++) {
-      var reader = new FileReader();
+    	for (var i = 0, f; f = files[i]; i++) {
+      		var reader = new FileReader();
       
-	reader.onload = function(e) {
-		stringToAppend = e.target.result;
-		var listItem = document.getElementsByTagName( "h3" );
-		var amount = listItem.length;
-		box.val(stringToAppend);
-	};
-	reader.readAsText(f);
-    };
- };
+			reader.onload = function(e) {
+				stringToAppend = e.target.result;
+				box.val(stringToAppend);
+			};
+		reader.readAsText(f);
+    	};
+ 	};
   
-function addUploadButtonListener(){
-$( ".fileToUpload" ).each(function( index ) {
-   addEventListener('change', handleFileSelect, false);
-});
-};
+	function addUploadButtonListener(){
+		$( ".fileToUpload" ).each(function( index ) {
+   			addEventListener('change', handleFileSelect, false);
+		});
+	};
 	
 	</script>
 	<div id="fileList" class="container">
 		<div th:if="${files != null}" th:each="file : ${files}" class="file row">
-			<h3>New File to Review</h3>
+			<h3>1</h3>
 			<div class="form-group">
 				<label class = "label label-primary">File Name</label>
 				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
