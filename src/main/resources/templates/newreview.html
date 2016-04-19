@@ -72,8 +72,8 @@
 	
 	</script>
 	<div id="fileList" class="container">
-		<div th:if="${files != null}" th:each="file : ${files}" class="file row">
-			<h3>1</h3>
+		<div th:if="${files != null}" th:each="file,stat : ${files}" class="file row">
+			<h3 th:text="${stat.index + 1}"/>
 			<div class="form-group">
 				<label class = "label label-primary">File Name</label>
 				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
