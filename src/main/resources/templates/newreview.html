@@ -32,11 +32,18 @@
 		newFile.insertBefore(buttons);
 	};
 	
+	function counter(){
+		var listItem = document.getElementsByTagName( "h3" );
+		var amount = listItem.length;
+		$( "h3" ).eq(amount-1).text(amount);
+	};
+	
 	$(document).ready(function() {
 		buttons = $('#buttons');
 		
 		$('#addFileBtn').click(function() {
 			addNewFile();
+			counter();
 		});
 		
 		$('#submitBtn').click(function() {
@@ -65,8 +72,8 @@
 	
 	</script>
 	<div id="fileList" class="container">
-		<div th:if="${files != null}" th:each="file : ${files}" class="file row">
-			<h3>New File to Review</h3>
+		<div th:if="${files != null}" th:each="file,stat : ${files}" class="file row">
+			<h3 th:text="${stat.index + 1}"/>
 			<div class="form-group">
 				<label class = "label label-primary">File Name</label>
 				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
