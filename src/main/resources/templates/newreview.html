@@ -40,10 +40,12 @@
 	
 	$(document).ready(function() {
 		buttons = $('#buttons');
+		addUploadButtonListener();
 		
 		$('#addFileBtn').click(function() {
 			addNewFile();
 			counter();
+			addUploadButtonListener();
 		});
 		
 		$('#submitBtn').click(function() {
@@ -70,6 +72,27 @@
 		});
 	});
 	
+	function handleFileSelect(evt) {
+    	var box = $(evt.target).closest('.file').find('.fileContent');
+    	var files = evt.target.files; 
+    
+    	for (var i = 0, f; f = files[i]; i++) {
+      		var reader = new FileReader();
+      
+			reader.onload = function(e) {
+				stringToAppend = e.target.result;
+				box.val(stringToAppend);
+			};
+		reader.readAsText(f);
+    	};
+ 	};
+  
+	function addUploadButtonListener(){
+		$( ".fileToUpload" ).each(function( index ) {
+   			addEventListener('change', handleFileSelect, false);
+		});
+	};
+	
 	</script>
 	<div id="fileList" class="container">
 		<div th:if="${files != null}" th:each="file,stat : ${files}" class="file row">
@@ -90,9 +113,12 @@
 				<label class = "label label-primary">Review Comment</label>
 				<textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment" th:text="${file.fileComment}"/>
 			</div>
+		<div class="form-group">
+				<input class="form-control fileToUpload panel-primary" type="file" placeholder="Upload File" name="files[]" id="files"></input>
+			</div>
 		</div>
 		<p id="buttons" class="row">
-			<button type="button" class="btn btn-info" id="addFileBtn">Add Additional File(s)</button>
+			<button type="button" class="btn btn-info" id="addFileBtn">Add Additional File</button>
 			<button type="button" class="btn btn-primary" id="submitBtn">Submit Your File(s)</button>
 		</p>
 	</div>
