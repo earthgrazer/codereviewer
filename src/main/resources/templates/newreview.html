@@ -1,175 +1,192 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>New Review</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script type="text/javascript" th:src="@{/js/patchparser.js}"></script>
-<style>
-@media (min-width: 1200px) {
-	.container {
- 		width: 760px;
-	}
-}
-</style>
+    <title>New Review</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/patchparser.js}"></script>
+    <style>
+        @media (min-width: 1200px) {
+            .container {
+                width: 760px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-	<div class="page-header">
-		<h1>codereviewer <small>review code without leaving your chair</small></h1>
-	</div>
+<div class="page-header">
+    <h1>codereviewer
+        <small>review code without leaving your chair</small>
+    </h1>
+</div>
 
-	<script type="text/javascript" th:inline="javascript">
-		/*<![CDATA[*/
-	var buttons;
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    var buttons;
 
-	function removeAllFiles() {
-		$('.file').not(':first').remove();
-		clearFile($('.file:first'));
-	};
+    function removeAllFiles() {
+        $('.file').not(':first').remove();
+        clearFile($('.file:first'));
+    }
+    ;
 
-	function clearFile(file) {
-		file.find(".fileName").val("");
-		file.find(".fileContent").val("");
-		file.find(".fileDiff").val("");
-		file.find(".fileComment").val("");
-		file.find(".fileToUpload")[0].addEventListener('change', handleFileSelect, false);
-	};
+    function clearFile(file) {
+        file.find(".fileName").val("");
+        file.find(".fileContent").val("");
+        file.find(".fileDiff").val("");
+        file.find(".fileComment").val("");
+        file.find(".fileToUpload")[0].addEventListener('change', handleFileSelect, false);
+    }
+    ;
 
-	function addNewFile() {
-		var newFile = $(".file").first().clone();
-		clearFile(newFile);
-		newFile.insertBefore(buttons);
-		setFileLabel(newFile[0]);
+    function addNewFile() {
+        var newFile = $(".file").first().clone();
+        clearFile(newFile);
+        newFile.insertBefore(buttons);
+        setFileLabel(newFile[0]);
         return newFile;
-	};
+    }
+    ;
 
-	function setFileLabel(file) {
-		var files = $('.file');
+    function setFileLabel(file) {
+        var files = $('.file');
 
-		for (var i = 0; i < files.length; i++) {
-			let f = files[i];
+        for (var i = 0; i < files.length; i++) {
+            let f = files[i];
 
-			if (f == file) {
-				$(file).find('h3').text(i + 1);
-			}
-		}
-	};
+            if (f == file) {
+                $(file).find('h3').text(i + 1);
+            }
+        }
+    }
+    ;
 
-	function handleFileSelect(evt) {
-		var box = $(evt.target).closest('.file').find('.fileContent');
-		var files = evt.target.files;
+    function handleFileSelect(evt) {
+        var box = $(evt.target).closest('.file').find('.fileContent');
+        var files = evt.target.files;
 
-		for (var i = 0, f; f = files[i]; i++) {
-			var reader = new FileReader();
+        for (var i = 0, f; f = files[i]; i++) {
+            var reader = new FileReader();
 
-			reader.onload = function(e) {
-				stringToAppend = e.target.result;
-				box.val(stringToAppend);
-			};
+            reader.onload = function (e) {
+                stringToAppend = e.target.result;
+                box.val(stringToAppend);
+            };
 
-			reader.readAsText(f);
-		};
-	};
+            reader.readAsText(f);
+        }
+        ;
+    }
+    ;
 
-	function importPatchHandler(e) {
-		var fileList = e.target.files;
+    function importPatchHandler(e) {
+        var fileList = e.target.files;
 
-		for (var i = 0, f; f = fileList[i]; i++) {
-			var reader = new FileReader();
+        for (var i = 0, f; f = fileList[i]; i++) {
+            var reader = new FileReader();
 
-			reader.onload = loadPatches;
+            reader.onload = loadPatches;
 
-			reader.readAsText(f);
-		}
-	};
+            reader.readAsText(f);
+        }
+    }
+    ;
 
-	function loadPatches() {
-		var filePatches = PatchParser.parsePatch(this.result);
+    function loadPatches() {
+        var filePatches = PatchParser.parsePatch(this.result);
 
-		removeAllFiles();
+        removeAllFiles();
 
-		for (var i = 0; i < filePatches.length; i++) {
-			let patch = filePatches[i];
-			let file;
+        for (var i = 0; i < filePatches.length; i++) {
+            let patch = filePatches[i];
+            let file;
 
-			if (i == 0) {
-				file = $('.file:first');
-			}
-			else {
-				file = addNewFile();
-			}
+            if (i == 0) {
+                file = $('.file:first');
+            }
+            else {
+                file = addNewFile();
+            }
 
-			file.find('.fileName').val(patch.path);
-			file.find('.fileDiff').val(patch.content);
-		}
-	};
+            file.find('.fileName').val(patch.path);
+            file.find('.fileDiff').val(patch.content);
+        }
+    }
+    ;
 
-	$(document).ready(function() {
-		buttons = $('#buttons');
+    $(document).ready(function () {
+        buttons = $('#buttons');
 
-		$('#addFileBtn').click(function() {
-			setFileLabel(addNewFile());
-		});
+        $('#addFileBtn').click(function () {
+            setFileLabel(addNewFile());
+        });
 
-		$('#submitBtn').click(function() {
-			var payload = [];
+        $('#submitBtn').click(function () {
+            var payload = [];
 
-			$('.file').each(function(index, element) {
-				payload.push({
-					'fileName': $(this).find('.fileName').val(),
-					'fileContent': $(this).find('.fileContent').val(),
-					'fileDiff': $(this).find('.fileDiff').val(),
-					'fileComment': $(this).find('.fileComment').val()
-				});
-			});
+            $('.file').each(function (index, element) {
+                payload.push({
+                    'fileName': $(this).find('.fileName').val(),
+                    'fileContent': $(this).find('.fileContent').val(),
+                    'fileDiff': $(this).find('.fileDiff').val(),
+                    'fileComment': $(this).find('.fileComment').val()
+                });
+            });
 
-			$.ajax({
-				type: 'POST',
-				url: '/review',
-				data: JSON.stringify(payload),
-				contentType: 'application/json',
-				success: function(d) {
-					window.location.href = "/review/" + d;
-				}
-			});
-		});
+            $.ajax({
+                type: 'POST',
+                url: '/review',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                success: function (d) {
+                    window.location.href = "/review/" + d;
+                }
+            });
+        });
 
-		$('#importPatchBtn')[0].addEventListener('change', importPatchHandler, false);
-	});
+        $('#importPatchBtn')[0].addEventListener('change', importPatchHandler, false);
+    });
 
-		/*]]>*/
-	</script>
-	<div id="fileList" class="container">
-		<div th:if="${files != null}" th:each="file,stat : ${files}" class="file row">
-			<h3 th:text="${stat.index + 1}"/>
-			<div class="form-group">
-				<label class = "label label-primary">File Name</label>
-				<input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
-			</div>
-			<div class="form-group">
-				<label class = "label label-primary">File Content</label>
-				<textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Content" th:text="${file.fileContent}"/>
-			</div>
-			<div class="form-group">
-				<label class = "label label-primary">File Diff</label>
-				<textarea class="form-control panel-primary fileDiff" rows="10" placeholder="File Diff" th:text="${file.fileDiff}"/>
-			</div>
-			<div class="form-group">
-				<label class = "label label-primary">Review Comment</label>
-				<textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment" th:text="${file.fileComment}"/>
-			</div>
-			<div class="form-group">
-				<input class="form-control fileToUpload panel-primary" type="file" placeholder="Upload File" name="files[]" id="files"/>
-			</div>
-		</div>
-		<p id="buttons" class="row">
-			<button type="button" class="btn btn-info" id="addFileBtn">Add Additional File</button>
-			<input class="importPatchInput" type="file" placeholder="Import Patch" name="files[]" id="importPatchBtn"/>
-			<button type="button" class="btn btn-primary" id="submitBtn">Submit Your File(s)</button>
-		</p>
-	</div>
+    /*]]>*/
+</script>
+<div id="fileList" class="container">
+    <div th:if="${files != null}" th:each="file,stat : ${files}" class="file row">
+        <h3 th:text="${stat.index + 1}"/>
+        <div class="form-group">
+            <label class="label label-primary">File Name</label>
+            <input class="form-control panel-primary fileName" placeholder="File Name" th:value="${file.fileName}"/>
+        </div>
+        <div class="form-group">
+            <label class="label label-primary">File Content</label>
+            <textarea class="form-control panel-primary fileContent" rows="10" placeholder="File Content"
+                      th:text="${file.fileContent}"/>
+        </div>
+        <div class="form-group">
+            <label class="label label-primary">File Diff</label>
+            <textarea class="form-control panel-primary fileDiff" rows="10" placeholder="File Diff"
+                      th:text="${file.fileDiff}"/>
+        </div>
+        <div class="form-group">
+            <label class="label label-primary">Review Comment</label>
+            <textarea class="form-control panel-primary fileComment" rows="3" placeholder="Review Comment"
+                      th:text="${file.fileComment}"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control fileToUpload panel-primary" type="file" placeholder="Upload File" name="files[]"
+                   id="files"/>
+        </div>
+    </div>
+    <p id="buttons" class="row">
+        <button type="button" class="btn btn-info" id="addFileBtn">Add Additional File</button>
+        <input class="importPatchInput" type="file" placeholder="Import Patch" name="files[]" id="importPatchBtn"/>
+        <button type="button" class="btn btn-primary" id="submitBtn">Submit Your File(s)</button>
+    </p>
+</div>
 </body>
 </html>
