@@ -16,6 +16,10 @@
                 width: 760px;
             }
         }
+
+        #importPatch {
+            display: none;
+        }
     </style>
 </head>
 
@@ -150,7 +154,11 @@
             });
         });
 
-        $('#importPatchBtn')[0].addEventListener('change', importPatchHandler, false);
+        $('#importPatch')[0].addEventListener('change', importPatchHandler, false);
+
+        $('#importPatchBtn').click(function() {
+           $('#importPatch').click();
+        });
     });
 
     /*]]>*/
@@ -184,7 +192,8 @@
     </div>
     <p id="buttons" class="row">
         <button type="button" class="btn btn-info" id="addFileBtn">Add Additional File</button>
-        <input class="importPatchInput" type="file" placeholder="Import Patch" name="files[]" id="importPatchBtn"/>
+        <input type="file" placeholder="Import Patch" name="files[]" id="importPatch"/>
+        <button type="button" class="btn btn-info" id="importPatchBtn">Import Unified Patch</button>
         <button type="button" class="btn btn-primary" id="submitBtn">Submit Your File(s)</button>
     </p>
 </div>
