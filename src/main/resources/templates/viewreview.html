@@ -115,7 +115,7 @@ $(document).ready(function(){
 	<div class="filesection" th:each="file,stat : ${files}">
 		<h2 th:inline="text" th:id="${stat.index}">[[${file.fileName}]]</h2>
 		<h3 th:if="${not file.fileComment.isEmpty()}" class = "label label-primary">Review Comment</h3>
-		<p th:inline="text" th:if="${not file.fileComment.isEmpty()}">[[${file.fileComment}]]</p>
+		<p th:inline="text" th:if="${not file.fileComment.isEmpty()}" class = "form-control panel-primary">[[${file.fileComment}]]</p>
 		<h3 th:if="${not file.fileContent.isEmpty()}" class = "label label-primary">File Content</h3>
 		<pre class="filecontent" th:inline="text" th:if="${not file.fileContent.isEmpty()}">[[${file.fileContent}]]</pre>
 		<h3 th:if="${not file.fileDiff.isEmpty()}" class = "label label-primary">File Diff</h3>
