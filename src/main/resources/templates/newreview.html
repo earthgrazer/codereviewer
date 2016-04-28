@@ -123,9 +123,16 @@
         }
     }
     ;
+    
+function addUploadButtonListener(){
+$( ".fileToUpload" ).each(function( index ) {
+			addEventListener('change', handleFileSelect, false);
+	});
+	};
 
     $(document).ready(function () {
         buttons = $('#buttons');
+        addUploadButtonListener();
 
         $('#addFileBtn').click(function () {
             setFileLabel(addNewFile());
