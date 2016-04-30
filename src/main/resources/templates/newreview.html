@@ -45,6 +45,7 @@
         file.find(".fileDiff").val("");
         file.find(".fileComment").val("");
         file.find(".fileToUpload")[0].addEventListener('change', handleFileSelect, false);
+        file.find(".deleteButton")[0].addEventListener('click', deleteFile, false);
     }
     ;
 
@@ -86,6 +87,18 @@
         ;
     }
     ;
+    
+    //finds parent and delete files
+    function deleteFile(e){
+    	$(e.target).closest('.file').remove();
+    };
+    
+    //this function tries to add listener when first form is initialized, but breaks everything...
+    function addDeleteButtonListener(){
+    	$( ".deleteButton" ).each(function( index ) {
+				addEventListener('click',deleteFile, false);
+		});
+	};
 
     function importPatchHandler(e) {
         var fileList = e.target.files;
@@ -124,6 +137,8 @@
 
     $(document).ready(function () {
         buttons = $('#buttons');
+        //this line breaks everything
+        //addDeleteButtonListener();
 
         $('#addFileBtn').click(function () {
             setFileLabel(addNewFile());
@@ -186,6 +201,9 @@
         <div class="form-group">
             <input class="form-control fileToUpload panel-primary" type="file" placeholder="Upload File" name="files[]"
                    id="files"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control deleteButton btn btn-danger" type="button" value="Delete Form"/>
         </div>
     </div>
     <p id="buttons" class="row">
